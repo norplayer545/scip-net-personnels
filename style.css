@@ -4,7 +4,8 @@ body {
     background: #000;
     color: #fff;
     font-family: 'VT323', monospace;
-    font-size: 28px;
+    font-size: 18px;
+    line-height: 1.1;
     margin: 0;
     padding: 6px;
     overflow: hidden;
@@ -29,6 +30,7 @@ body {
 #input-line {
     display: none;
     align-items: center;
+    width: fit-content;
 }
 
 #prompt {
@@ -52,11 +54,12 @@ body {
 }
 
 #cursor {
-    width: 12px;
-    height: 26px;
+    width: 8px;
+    height: 18px;
     background: #fff;
     display: inline-block;
-    margin-left: 2px;
+    margin-left: 1px;
+    vertical-align: middle;
     animation: blink 1s steps(1) infinite;
 }
 
