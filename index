@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCiP.NET</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="terminal">
+
+    <div id="output">
+SCiP.NET v1.0
+Secure Containment Information Processing Network
+
+Type 'help'
+    </div>
+
+    <div id="input-line">
+        <span>&gt;</span>
+        <input id="command" type="text" autocomplete="off" autofocus>
+    </div>
+
+</div>
+
+<script src="terminal.js"></script>
+
+</body>
+</html>
