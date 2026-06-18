@@ -60,11 +60,10 @@ async function println(text = "") {
     await type(text + "\n");
 }
 
-/* ===== PURE STUTTER FUNCTION ===== */
+/* ===== PURE SILENT STUTTER (NO TEXT EVER) ===== */
 async function stutter() {
-    // silent freeze (no text, just delay)
-    if (Math.random() < 0.85) {
-        await sleep(rand(150, 1200));
+    if (Math.random() < 0.9) {
+        await sleep(rand(150, 1400));
     }
 }
 
@@ -78,11 +77,9 @@ async function boot() {
     /* LOGO */
     for (const line of logo) {
 
-        await stutter(); // <- ONLY STUTTER, NO TEXT
-
+        await stutter();   // silent freeze ONLY
         await println(line);
-
-        await stutter(); // extra instability between lines
+        await stutter();   // silent freeze ONLY
     }
 
     await println("");
@@ -100,8 +97,7 @@ async function boot() {
     ];
 
     for (const c of checks) {
-
-        await stutter(); // silent freeze only
+        await stutter();
         await println(c);
     }
 
