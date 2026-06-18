@@ -1,0 +1,31 @@
+body {
+    background: #050505;
+    color: #00ff66;
+    font-family: Consolas, monospace;
+    margin: 0;
+    padding: 20px;
+}
+
+#terminal {
+    max-width: 1200px;
+}
+
+#output {
+    white-space: pre-wrap;
+    margin-bottom: 10px;
+}
+
+#input-line {
+    display: flex;
+    gap: 8px;
+}
+
+#command {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #00ff66;
+    font-family: inherit;
+    font-size: inherit;
+    width: 100%;
+}
