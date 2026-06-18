@@ -1,7 +1,7 @@
 const output = document.getElementById("output");
 const input = document.getElementById("command");
-
-input.style.display = "none";
+const inputLine = document.getElementById("input-line");
+const terminal = document.getElementById("terminal");
 
 const logo = [
 "███████╗ ██████╗██╗██████╗     ███╗   ██╗███████╗████████╗",
@@ -12,109 +12,143 @@ const logo = [
 "╚══════╝ ╚═════╝╚═╝╚═╝         ╚═╝  ╚═══╝╚══════╝   ╚═╝"
 ];
 
+const commands = {
+    help: `
+AVAILABLE COMMANDS
+
+HELP
+VERSION
+CLEAR
+ABOUT
+STATUS
+LOGIN
+DATABASE
+`,
+
+    version: `
+SCiP.NET
+Version 2.0.0
+Build 2026.06
+`,
+
+    about: `
+SECURE CONTAINMENT INFORMATION
+PROCESSING NETWORK
+
+AUTHORIZED FOUNDATION ACCESS ONLY
+`,
+
+    status: `
+NETWORK STATUS: ONLINE
+DATABASE STATUS: ONLINE
+AUTH SERVICES: ONLINE
+ARCHIVE STATUS: ONLINE
+`,
+
+    login: `
+AUTHENTICATION SERVICE READY
+ENTER CREDENTIALS
+`,
+
+    database: `
+PERSONNEL DATABASE CONNECTED
+0 ERRORS DETECTED
+`
+};
+
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-async function typeText(text, speed = 15) {
-    for (const char of text) {
-        output.innerHTML += char;
-        await sleep(speed);
-    }
-
-    output.innerHTML += "\n";
-    output.scrollTop = output.scrollHeight;
+function scrollBottom() {
+    terminal.scrollTop = terminal.scrollHeight;
 }
 
-async function loadingLine(text) {
-    output.innerHTML += text;
+async function type(text, speed = 15) {
+    for (const char of text) {
+        output.textContent += char;
+        scrollBottom();
+        await sleep(speed);
+    }
+}
+
+async function println(text = "", speed = 15) {
+    await type(text + "\n", speed);
+}
+
+async function loading(text) {
+    await type(text);
 
     for (let i = 0; i < 3; i++) {
         await sleep(350);
-        output.innerHTML += ".";
-        output.scrollTop = output.scrollHeight;
+        await type(".");
     }
 
-    await sleep(250);
+    await sleep(150);
 
-    output.innerHTML += " [OK]\n";
-    output.scrollTop = output.scrollHeight;
+    await println(" [OK]", 2);
 }
 
 async function boot() {
 
-    // Draw logo line-by-line and character-by-character
     for (const line of logo) {
-        await typeText(line, 1);
-        await sleep(50);
+        await println(line, 1);
+        await sleep(25);
     }
 
-    await sleep(300);
+    await println("");
+    await println(
+        "SECURE CONTAINMENT INFORMATION PROCESSING NETWORK",
+        5
+    );
 
-    output.innerHTML += "\n";
+    await println("");
+    await sleep(400);
 
-    await typeText("Secure Containment Information Processing Network", 8);
+    await loading("INITIALIZING KERNEL");
+    await loading("LOADING FOUNDATION CORE");
+    await loading("VERIFYING FILESYSTEM");
+    await loading("MOUNTING PERSONNEL DATABASE");
+    await loading("LOADING INCIDENT ARCHIVE");
+    await loading("STARTING AUTHENTICATION SERVICE");
+    await loading("ESTABLISHING SECURE CONNECTION");
+    await loading("CHECKING SYSTEM INTEGRITY");
 
-    output.innerHTML += "\n";
+    await println("");
+    await println("SYSTEM READY", 10);
+    await println("");
 
-    await loadingLine("Initializing SCiP.NET");
-    await loadingLine("Loading Foundation Core Services");
-    await loadingLine("Loading Personnel Database");
-    await loadingLine("Loading Incident Archive");
-    await loadingLine("Loading Authentication Services");
-    await loadingLine("Loading Internal Communications");
-
-    output.innerHTML += "\n";
-
-    await typeText("System Ready.", 10);
-
-    output.innerHTML += "\n";
-
-    input.style.display = "block";
+    inputLine.style.display = "flex";
     input.focus();
 }
 
 boot();
 
-input.addEventListener("keydown", (e) => {
+input.addEventListener("keydown", async (e) => {
 
-    if (e.key !== "Enter") return;
+    if (e.key !== "Enter")
+        return;
 
     const cmd = input.value.trim();
 
-    output.innerHTML += `> ${cmd}\n`;
+    output.textContent += `> ${cmd}\n`;
 
-    switch (cmd.toLowerCase()) {
-
-        case "help":
-            output.innerHTML +=
-`Available Commands
-
-help
-version
-clear
-
-`;
-            break;
-
-        case "version":
-            output.innerHTML +=
-`SCiP.NET v1.0
-
-`;
-            break;
-
-        case "clear":
-            output.innerHTML = "";
-            break;
-
-        default:
-            output.innerHTML +=
-`Unknown Command
-
-`;
+    if (cmd === "") {
+        output.textContent += "\n";
+    }
+    else if (cmd.toLowerCase() === "clear") {
+        output.textContent = "";
+    }
+    else if (commands[cmd.toLowerCase()]) {
+        await println(commands[cmd.toLowerCase()]);
+    }
+    else {
+        await println(
+            `ERROR: UNKNOWN COMMAND '${cmd.toUpperCase()}'`
+        );
     }
 
     input.value = "";
-    output.scrollTop = output.scrollHeight;
+
+    scrollBottom();
 });
