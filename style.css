@@ -6,36 +6,50 @@ body {
     font-family: 'VT323', monospace;
     font-size: 20px;
     margin: 0;
-    padding: 10px;
+    padding: 0;
+
+    /* FIX: allow internal scrolling systems to behave */
     overflow: hidden;
 }
 
+/* MAIN TERMINAL LAYOUT FIX */
 #terminal {
     width: 100%;
     height: 100vh;
-    overflow-y: auto;
-    padding: 10px;
+
+    display: flex;
+    flex-direction: column;
+
+    padding: 12px;
+    box-sizing: border-box;
 }
 
+/* OUTPUT TAKES ALL SPACE */
 #output {
+    flex: 1;
     white-space: pre-wrap;
     margin: 0;
+
+    overflow-y: auto;
+
     text-shadow:
         0 0 2px rgba(255,255,255,.7),
         0 0 8px rgba(255,255,255,.2);
 }
 
-/* INPUT LINE FIXED */
+/* INPUT ALWAYS STAYS AT BOTTOM */
 #input-line {
     display: none;
     align-items: center;
-    margin-top: 10px;
+
+    margin-top: 8px;
 }
 
 #prompt {
     margin-right: 8px;
 }
 
+/* FIX: prevent weird shrinking / cutoff */
 #command {
     background: transparent;
     border: none;
@@ -45,8 +59,7 @@ body {
     font-family: inherit;
     font-size: inherit;
 
-    width: 100%;
-    min-width: 200px;
+    flex: 1;
 
     caret-color: #fff;
 }
