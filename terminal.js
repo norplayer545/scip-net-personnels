@@ -3,49 +3,65 @@ const input = document.getElementById("command");
 
 input.style.display = "none";
 
-const bootSequence = [
-`███████╗ ██████╗██╗██████╗     ███╗   ██╗███████╗████████╗
-██╔════╝██╔════╝██║██╔══██╗    ████╗  ██║██╔════╝╚══██╔══╝
-███████╗██║     ██║██████╔╝    ██╔██╗ ██║█████╗     ██║
-╚════██║██║     ██║██╔═══╝     ██║╚██╗██║██╔══╝     ██║
-███████║╚██████╗██║██║         ██║ ╚████║███████╗   ██║
-╚══════╝ ╚═════╝╚═╝╚═╝         ╚═╝  ╚═══╝╚══════╝   ╚═╝`,
+const output = document.getElementById("output");
+const input = document.getElementById("command");
 
-"",
-"Secure Containment Information Processing Network",
-"",
-"Initializing SCiP.NET...",
-"Loading Foundation Core Services...",
-"Loading Personnel Database...",
-"Loading Incident Archive...",
-"Loading Authentication Services...",
-"",
-"[ OK ] Personnel Services",
-"[ OK ] Records Archive",
-"[ OK ] Authentication System",
-"[ OK ] Internal Communications",
-"",
-"System Ready.",
-"",
-"Type 'help'",
-""
+input.style.display = "none";
+
+const logo = [
+"███████╗ ██████╗██╗██████╗     ███╗   ██╗███████╗████████╗",
+"██╔════╝██╔════╝██║██╔══██╗    ████╗  ██║██╔════╝╚══██╔══╝",
+"███████╗██║     ██║██████╔╝    ██╔██╗ ██║█████╗     ██║",
+"╚════██║██║     ██║██╔═══╝     ██║╚██╗██║██╔══╝     ██║",
+"███████║╚██████╗██║██║         ██║ ╚████║███████╗   ██║",
+"╚══════╝ ╚═════╝╚═╝╚═╝         ╚═╝  ╚═══╝╚══════╝   ╚═╝"
 ];
 
-let line = 0;
+async function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 
-function boot() {
-    if (line >= bootSequence.length) {
-        input.style.display = "block";
-        input.focus();
-        return;
+async function print(text) {
+    output.innerHTML += text + "\n";
+    output.scrollTop = output.scrollHeight;
+}
+
+async function loadingLine(text) {
+    output.innerHTML += text;
+
+    for (let i = 0; i < 3; i++) {
+        await sleep(400);
+        output.innerHTML += ".";
     }
 
-    output.innerHTML += bootSequence[line] + "\n";
-    output.scrollTop = output.scrollHeight;
+    await sleep(200);
+    output.innerHTML += " [OK]\n";
+}
 
-    line++;
+async function boot() {
 
-    setTimeout(boot, 250);
+    // Logo loads line by line
+    for (const line of logo) {
+        await print(line);
+        await sleep(120);
+    }
+
+    await print("");
+    await print("Secure Containment Information Processing Network");
+    await print("");
+
+    await loadingLine("Initializing SCiP.NET");
+    await loadingLine("Loading Foundation Core Services");
+    await loadingLine("Loading Personnel Database");
+    await loadingLine("Loading Incident Archive");
+    await loadingLine("Loading Authentication Services");
+
+    await print("");
+    await print("System Ready.");
+    await print("");
+
+    input.style.display = "block";
+    input.focus();
 }
 
 boot();
