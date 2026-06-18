@@ -47,7 +47,7 @@ function scrollBottom() {
     terminal.scrollTop = terminal.scrollHeight;
 }
 
-/* ===== TYPEWRITER (UNCHANGED) ===== */
+/* ===== TYPEWRITER ===== */
 async function type(text, speed = 2) {
     for (let i = 0; i < text.length; i++) {
         output.textContent += text[i];
@@ -58,41 +58,39 @@ async function type(text, speed = 2) {
 
 async function println(text = "") {
 
-    // SMALL CHANCE OF BOOT LAG EVEN INSIDE PRINT
-    if (Math.random() < 0.15) {
-        await sleep(rand(120, 600));
+    // stronger random stutter (NO TEXT OUTPUT)
+    if (Math.random() < 0.55) {
+        await sleep(rand(120, 700));
     }
 
     await type(text + "\n");
 }
 
-/* ===== BOOT WITH STUTTERS ===== */
+/* ===== BOOT ===== */
 async function boot() {
 
-    if (!output) {
-        console.error("OUTPUT NOT FOUND");
-        return;
-    }
+    if (!output) return;
 
     output.textContent = "";
 
-    /* LOGO WITH STUTTERS */
+    /* LOGO (HEAVY STUTTER, NO EXTRA TEXT) */
     for (const line of logo) {
 
-        if (Math.random() < 0.35) {
-            await println("[SYSTEM BUFFERING...]");
-            await sleep(rand(200, 900));
+        if (Math.random() < 0.75) {
+            await sleep(rand(250, 1100));
         }
 
         await println(line);
+
+        // micro jitter between lines
+        await sleep(rand(60, 350));
     }
 
     await println("");
-
     await println("SECURE CONTAINMENT INFORMATION PROCESSING NETWORK");
     await println("");
 
-    /* SYSTEM CHECK WITH FREEZES */
+    /* SYSTEM CHECK WITH FREQUENT FREEZES */
     await println("[SYSTEM CHECK]");
 
     const checks = [
@@ -104,9 +102,8 @@ async function boot() {
 
     for (const c of checks) {
 
-        if (Math.random() < 0.4) {
-            await println("[DELAY DETECTED - RETRYING MODULE]");
-            await sleep(rand(300, 1100));
+        if (Math.random() < 0.8) {
+            await sleep(rand(300, 1200));
         }
 
         await println(c);
@@ -114,9 +111,9 @@ async function boot() {
 
     await println("");
 
-    if (Math.random() < 0.5) {
-        await println("[WARNING] SYSTEM TIMING DESYNC DETECTED");
-        await sleep(rand(400, 1200));
+    /* FINAL STABILITY FAILURE FEEL */
+    if (Math.random() < 0.9) {
+        await sleep(rand(500, 1500));
     }
 
     await println("SYSTEM READY\n");
@@ -125,7 +122,7 @@ async function boot() {
     input.focus();
 }
 
-/* ===== SAFE STARTUP ===== */
+/* ===== SAFE START ===== */
 window.addEventListener("DOMContentLoaded", () => {
     boot();
 });
