@@ -12,12 +12,17 @@ const logo = [
 "╚══════╝ ╚═════╝╚═╝╚═╝         ╚═╝  ╚═══╝╚══════╝   ╚═╝"
 ];
 
-async function sleep(ms) {
+function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-async function print(text) {
-    output.innerHTML += text + "\n";
+async function typeText(text, speed = 15) {
+    for (const char of text) {
+        output.innerHTML += char;
+        await sleep(speed);
+    }
+
+    output.innerHTML += "\n";
     output.scrollTop = output.scrollHeight;
 }
 
@@ -25,35 +30,45 @@ async function loadingLine(text) {
     output.innerHTML += text;
 
     for (let i = 0; i < 3; i++) {
-        await sleep(400);
+        await sleep(350);
         output.innerHTML += ".";
+        output.scrollTop = output.scrollHeight;
     }
 
-    await sleep(200);
+    await sleep(250);
+
     output.innerHTML += " [OK]\n";
+    output.scrollTop = output.scrollHeight;
 }
 
 async function boot() {
 
-    // Logo loads line by line
+    // Draw logo line-by-line and character-by-character
     for (const line of logo) {
-        await print(line);
-        await sleep(120);
+        await typeText(line, 1);
+        await sleep(50);
     }
 
-    await print("");
-    await print("Secure Containment Information Processing Network");
-    await print("");
+    await sleep(300);
+
+    output.innerHTML += "\n";
+
+    await typeText("Secure Containment Information Processing Network", 8);
+
+    output.innerHTML += "\n";
 
     await loadingLine("Initializing SCiP.NET");
     await loadingLine("Loading Foundation Core Services");
     await loadingLine("Loading Personnel Database");
     await loadingLine("Loading Incident Archive");
     await loadingLine("Loading Authentication Services");
+    await loadingLine("Loading Internal Communications");
 
-    await print("");
-    await print("System Ready.");
-    await print("");
+    output.innerHTML += "\n";
+
+    await typeText("System Ready.", 10);
+
+    output.innerHTML += "\n";
 
     input.style.display = "block";
     input.focus();
@@ -62,21 +77,31 @@ async function boot() {
 boot();
 
 input.addEventListener("keydown", (e) => {
+
     if (e.key !== "Enter") return;
 
     const cmd = input.value.trim();
 
-    output.innerHTML += "> " + cmd + "\n";
+    output.innerHTML += `> ${cmd}\n`;
 
     switch (cmd.toLowerCase()) {
+
         case "help":
             output.innerHTML +=
-                "help\nversion\nclear\n";
+`Available Commands
+
+help
+version
+clear
+
+`;
             break;
 
         case "version":
             output.innerHTML +=
-                "SCiP.NET v1.0\n";
+`SCiP.NET v1.0
+
+`;
             break;
 
         case "clear":
@@ -85,8 +110,11 @@ input.addEventListener("keydown", (e) => {
 
         default:
             output.innerHTML +=
-                "Unknown Command\n";
+`Unknown Command
+
+`;
     }
 
     input.value = "";
+    output.scrollTop = output.scrollHeight;
 });
