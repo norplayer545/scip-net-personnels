@@ -4,26 +4,31 @@ const input = document.getElementById("command");
 input.style.display = "none";
 
 const bootSequence = [
-    "SCiP.NET v1.0",
-    "",
-    "Initializing Secure Containment Information Processing Network...",
-    "",
-    "Loading Foundation Core Services...",
-    "Loading Personnel Database...",
-    "Loading Incident Archive...",
-    "Loading Clearance Registry...",
-    "",
-    "Establishing Secure Connection...",
-    "",
-    "[ OK ] Personnel Services",
-    "[ OK ] Records Archive",
-    "[ OK ] Authentication System",
-    "[ OK ] Internal Communications",
-    "",
-    "System Ready.",
-    "",
-    "Type 'help'",
-    ""
+`███████╗ ██████╗██╗██████╗     ███╗   ██╗███████╗████████╗
+██╔════╝██╔════╝██║██╔══██╗    ████╗  ██║██╔════╝╚══██╔══╝
+███████╗██║     ██║██████╔╝    ██╔██╗ ██║█████╗     ██║
+╚════██║██║     ██║██╔═══╝     ██║╚██╗██║██╔══╝     ██║
+███████║╚██████╗██║██║         ██║ ╚████║███████╗   ██║
+╚══════╝ ╚═════╝╚═╝╚═╝         ╚═╝  ╚═══╝╚══════╝   ╚═╝`,
+
+"",
+"Secure Containment Information Processing Network",
+"",
+"Initializing SCiP.NET...",
+"Loading Foundation Core Services...",
+"Loading Personnel Database...",
+"Loading Incident Archive...",
+"Loading Authentication Services...",
+"",
+"[ OK ] Personnel Services",
+"[ OK ] Records Archive",
+"[ OK ] Authentication System",
+"[ OK ] Internal Communications",
+"",
+"System Ready.",
+"",
+"Type 'help'",
+""
 ];
 
 let line = 0;
