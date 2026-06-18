@@ -1,67 +1,64 @@
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
 body {
     background: #000;
-    color: #00ff66;
-    font-family: Consolas, "Courier New", monospace;
+    color: #fff;
+    font-family: 'VT323', monospace;
+    font-size: 20px;
     margin: 0;
-    padding: 20px;
+    padding: 4px;
     overflow: hidden;
 }
 
 #terminal {
     width: 100%;
-    height: calc(100vh - 40px);
+    height: 100vh;
     overflow-y: auto;
+    overflow-x: hidden;
 }
 
 #output {
     white-space: pre-wrap;
     word-break: break-word;
     margin: 0;
+    color: #fff;
+
     text-shadow:
-        0 0 5px #00ff66,
-        0 0 10px #00ff66,
-        0 0 20px #00ff66;
+        0 0 2px rgba(255,255,255,0.8),
+        0 0 8px rgba(255,255,255,0.3);
 }
 
 #input-line {
     display: none;
     align-items: center;
-    margin-top: 5px;
+    margin-top: 4px;
 }
 
 #prompt {
+    color: #fff;
     margin-right: 8px;
-    white-space: nowrap;
-}
-
-.user {
-    color: #00cc00;
-}
-
-.host {
-    color: #3ea6ff;
+    flex-shrink: 0;
 }
 
 #command {
     background: transparent;
     border: none;
     outline: none;
-    color: #00ff66;
+    color: #fff;
     font-family: inherit;
     font-size: inherit;
     flex: 1;
 
-    /* Hide browser caret */
+    /* hide browser caret */
     caret-color: transparent;
 }
 
 #cursor {
     display: inline-block;
-    width: 9px;
-    height: 18px;
-    background: #ffffff;
+    width: 10px;
+    height: 22px;
+    background: #fff;
     margin-left: 2px;
-    vertical-align: middle;
     animation: terminalBlink 1s steps(1) infinite;
 }
 
@@ -69,6 +66,7 @@ body {
     0%, 49% {
         opacity: 1;
     }
+
     50%, 100% {
         opacity: 0;
     }
@@ -78,11 +76,14 @@ body {
     position: fixed;
     inset: 0;
     pointer-events: none;
+
     background:
         repeating-linear-gradient(
-            transparent 0px,
+            0deg,
+            rgba(255,255,255,0.015) 0px,
+            rgba(255,255,255,0.015) 1px,
             transparent 2px,
-            rgba(255,255,255,0.03) 3px
+            transparent 4px
         );
 }
 
@@ -91,12 +92,13 @@ body::before {
     position: fixed;
     inset: 0;
     pointer-events: none;
+
     background:
-        linear-gradient(
-            rgba(18,16,16,0) 50%,
-            rgba(0,0,0,0.15) 50%
+        radial-gradient(
+            ellipse at center,
+            transparent 60%,
+            rgba(0,0,0,0.35) 100%
         );
-    background-size: 100% 4px;
 }
 
 body::after {
@@ -104,10 +106,14 @@ body::after {
     position: fixed;
     inset: 0;
     pointer-events: none;
-    background:
-        radial-gradient(
-            ellipse at center,
-            transparent 0%,
-            rgba(0,0,0,0.35) 100%
+
+    opacity: 0.04;
+
+    background-image:
+        linear-gradient(
+            rgba(255,255,255,0.2) 1px,
+            transparent 1px
         );
+
+    background-size: 100% 4px;
 }
