@@ -3,6 +3,8 @@ const input = document.getElementById("command");
 const inputLine = document.getElementById("input-line");
 const terminal = document.getElementById("terminal");
 
+console.log(">>> NEW TERMINAL JS LOADED <<<");
+
 /* ===== ASCII LOGO ===== */
 const logo = [
 "███████╗ ██████╗██╗██████╗     ███╗   ██╗███████╗████████╗",
