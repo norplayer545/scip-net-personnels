@@ -17,17 +17,30 @@ const logo = [
 
 /* ===== COMMANDS ===== */
 const commands = {
-help: `AVAILABLE COMMANDS\nHELP\nVERSION\nSTATUS\nABOUT\nLOGIN\nDATABASE\nCLEAR`,
+help: `AVAILABLE COMMANDS
+HELP
+VERSION
+STATUS
+ABOUT
+LOGIN
+DATABASE
+CLEAR`,
 
-version: `SCIP.NET TERMINAL\nVERSION 2.0.0\nBUILD 2026.06`,
+version: `SCIP.NET TERMINAL
+VERSION 2.0.0
+BUILD 2026.06`,
 
-status: `NETWORK STATUS .... ONLINE\nDATABASE STATUS ... ONLINE\nAUTH SERVICE ...... ONLINE`,
+status: `NETWORK STATUS .... ONLINE
+DATABASE STATUS ... ONLINE
+AUTH SERVICE ...... ONLINE`,
 
-about: `SECURE CONTAINMENT INFORMATION PROCESSING NETWORK\nAUTHORIZED PERSONNEL ONLY`,
+about: `SECURE CONTAINMENT INFORMATION PROCESSING NETWORK
+AUTHORIZED PERSONNEL ONLY`,
 
 login: `AUTHENTICATION SERVICE READY`,
 
-database: `PERSONNEL DATABASE CONNECTED\nERRORS DETECTED: 0`
+database: `PERSONNEL DATABASE CONNECTED
+ERRORS DETECTED: 0`
 };
 
 /* ===== STATE ===== */
@@ -47,11 +60,21 @@ function scrollBottom() {
     terminal.scrollTop = terminal.scrollHeight;
 }
 
+/* ===== OUTPUT HELPERS ===== */
+function appendText(text) {
+    output.appendChild(document.createTextNode(text));
+    scrollBottom();
+}
+
 /* ===== TYPEWRITER ===== */
 async function type(text, speed = 2) {
     for (let i = 0; i < text.length; i++) {
-        output.textContent += text[i];
-        if (i % 2 === 0) scrollBottom();
+        appendText(text[i]);
+
+        if (i % 2 === 0) {
+            scrollBottom();
+        }
+
         await sleep(speed);
     }
 }
@@ -60,28 +83,32 @@ async function println(text = "") {
     await type(text + "\n");
 }
 
-/* ===== LIGHT STUTTER (FIXED) ===== */
+/* ===== LIGHT STUTTER ===== */
 async function stutter() {
     if (Math.random() < 0.35) {
         await sleep(rand(20, 120));
     }
 }
 
-/* ===== SYSTEM CHECK ===== */
+/* ===== SYSTEM CHECK (FIXED) ===== */
 async function loadCheck(name) {
-    let dots = "";
 
-    for (let i = 0; i < 3; i++) {
+    const line = document.createElement("div");
+    output.appendChild(line);
+
+    for (let i = 0; i <= 3; i++) {
+
         await stutter();
 
-        dots += ".";
-        output.textContent += `\r${name}${dots}`;
+        line.textContent = `${name}${".".repeat(i)}`;
+
         scrollBottom();
 
         await sleep(rand(80, 200));
     }
 
-    output.textContent += ` OK\n`;
+    line.textContent = `${name} [OK]`;
+
     scrollBottom();
 }
 
@@ -90,9 +117,8 @@ async function boot() {
 
     if (!output) return;
 
-    output.textContent = "";
+    output.innerHTML = "";
 
-    /* ===== LOGO (FAST LINE-BY-LINE) ===== */
     for (const line of logo) {
         await stutter();
         await println(line);
@@ -102,7 +128,6 @@ async function boot() {
     await println("SECURE CONTAINMENT INFORMATION PROCESSING NETWORK");
     await println("");
 
-    /* SYSTEM CHECK */
     await println("[SYSTEM CHECK]");
 
     const checks = [
@@ -117,8 +142,8 @@ async function boot() {
     }
 
     await println("");
-
-    await println("SYSTEM READY\n");
+    await println("SYSTEM READY");
+    await println("");
 
     inputLine.style.display = "flex";
     input.focus();
@@ -136,9 +161,12 @@ input.addEventListener("keydown", async e => {
 
     if (e.key === "ArrowUp") {
         e.preventDefault();
+
         if (!history.length) return;
 
-        if (historyIndex < history.length - 1) historyIndex++;
+        if (historyIndex < history.length - 1) {
+            historyIndex++;
+        }
 
         input.value = history[history.length - 1 - historyIndex];
         return;
@@ -154,6 +182,7 @@ input.addEventListener("keydown", async e => {
             historyIndex = -1;
             input.value = "";
         }
+
         return;
     }
 
@@ -165,10 +194,10 @@ input.addEventListener("keydown", async e => {
     history.push(cmd);
     historyIndex = -1;
 
-    output.textContent += `> ${cmd}\n`;
+    appendText(`> ${cmd}\n`);
 
     if (lower === "clear") {
-        output.textContent = "";
+        output.innerHTML = "";
     }
     else if (commands[lower]) {
         await println(commands[lower]);
