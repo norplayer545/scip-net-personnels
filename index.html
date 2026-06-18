@@ -4,20 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SCiP.NET</title>
-
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div id="terminal">
+<div id="crt"></div>
 
-<div id="output"></div>
+<div id="terminal">
+    <pre id="output"></pre>
 
     <div id="input-line">
-        <span>&gt;</span>
-        <input id="command" type="text" autocomplete="off" autofocus>
+        <span id="prompt">></span>
+        <input
+            id="command"
+            type="text"
+            autocomplete="off"
+            spellcheck="false"
+        >
+        <span id="cursor">█</span>
     </div>
-
 </div>
 
 <script src="terminal.js"></script>
