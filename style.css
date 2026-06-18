@@ -1,23 +1,35 @@
 body {
-    background: #000000;
+    background: #000;
     color: #00ff66;
-    font-family: Consolas, monospace;
+    font-family: Consolas, "Courier New", monospace;
     margin: 0;
     padding: 20px;
+    overflow: hidden;
 }
 
 #terminal {
-    max-width: 1200px;
+    width: 100%;
+    height: calc(100vh - 40px);
+    overflow-y: auto;
 }
 
 #output {
     white-space: pre-wrap;
-    min-height: 90vh;
+    word-break: break-word;
+    margin: 0;
+    text-shadow:
+        0 0 5px #00ff66,
+        0 0 10px #00ff66;
 }
 
 #input-line {
-    display: flex;
-    gap: 8px;
+    display: none;
+    align-items: center;
+    margin-top: 5px;
+}
+
+#prompt {
+    margin-right: 8px;
 }
 
 #command {
@@ -27,5 +39,40 @@ body {
     color: #00ff66;
     font-family: inherit;
     font-size: inherit;
-    width: 100%;
+    flex: 1;
+}
+
+#cursor {
+    animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+    50% {
+        opacity: 0;
+    }
+}
+
+#crt {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background:
+        repeating-linear-gradient(
+            transparent 0px,
+            transparent 2px,
+            rgba(255,255,255,0.03) 3px
+        );
+}
+
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(
+            ellipse at center,
+            transparent 0%,
+            rgba(0,0,0,0.35) 100%
+        );
 }
