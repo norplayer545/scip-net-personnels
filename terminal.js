@@ -3,11 +3,6 @@ const input = document.getElementById("command");
 
 input.style.display = "none";
 
-const output = document.getElementById("output");
-const input = document.getElementById("command");
-
-input.style.display = "none";
-
 const logo = [
 "███████╗ ██████╗██╗██████╗     ███╗   ██╗███████╗████████╗",
 "██╔════╝██╔════╝██║██╔══██╗    ████╗  ██║██╔════╝╚══██╔══╝",
