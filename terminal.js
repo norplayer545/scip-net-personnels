@@ -57,13 +57,15 @@ async function type(text, speed = 2) {
 }
 
 async function println(text = "") {
-
-    // stronger random stutter (NO TEXT OUTPUT)
-    if (Math.random() < 0.55) {
-        await sleep(rand(120, 700));
-    }
-
     await type(text + "\n");
+}
+
+/* ===== PURE STUTTER FUNCTION ===== */
+async function stutter() {
+    // silent freeze (no text, just delay)
+    if (Math.random() < 0.85) {
+        await sleep(rand(150, 1200));
+    }
 }
 
 /* ===== BOOT ===== */
@@ -73,24 +75,21 @@ async function boot() {
 
     output.textContent = "";
 
-    /* LOGO (HEAVY STUTTER, NO EXTRA TEXT) */
+    /* LOGO */
     for (const line of logo) {
 
-        if (Math.random() < 0.75) {
-            await sleep(rand(250, 1100));
-        }
+        await stutter(); // <- ONLY STUTTER, NO TEXT
 
         await println(line);
 
-        // micro jitter between lines
-        await sleep(rand(60, 350));
+        await stutter(); // extra instability between lines
     }
 
     await println("");
     await println("SECURE CONTAINMENT INFORMATION PROCESSING NETWORK");
     await println("");
 
-    /* SYSTEM CHECK WITH FREQUENT FREEZES */
+    /* SYSTEM CHECK */
     await println("[SYSTEM CHECK]");
 
     const checks = [
@@ -102,20 +101,13 @@ async function boot() {
 
     for (const c of checks) {
 
-        if (Math.random() < 0.8) {
-            await sleep(rand(300, 1200));
-        }
-
+        await stutter(); // silent freeze only
         await println(c);
     }
 
     await println("");
 
-    /* FINAL STABILITY FAILURE FEEL */
-    if (Math.random() < 0.9) {
-        await sleep(rand(500, 1500));
-    }
-
+    await stutter();
     await println("SYSTEM READY\n");
 
     inputLine.style.display = "flex";
