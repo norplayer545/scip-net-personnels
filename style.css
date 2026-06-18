@@ -12,7 +12,7 @@ body {
 
 #output {
     white-space: pre-wrap;
-    margin-bottom: 10px;
+    min-height: 90vh;
 }
 
 #input-line {
