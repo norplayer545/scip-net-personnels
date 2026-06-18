@@ -1,31 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SCiP.NET</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+<div id="input-line">
+    <span id="prompt">
+        <span class="user">admin</span>@<span class="host">scipnet</span>:~$
+    </span>
 
-<div id="crt"></div>
+    <input
+        id="command"
+        type="text"
+        autocomplete="off"
+        spellcheck="false"
+    >
 
-<div id="terminal">
-    <pre id="output"></pre>
-
-    <div id="input-line">
-        <span id="prompt">></span>
-        <input
-            id="command"
-            type="text"
-            autocomplete="off"
-            spellcheck="false"
-        >
-        <span id="cursor">█</span>
-    </div>
+    <span id="cursor"></span>
 </div>
-
-<script src="terminal.js"></script>
-
-</body>
-</html>
