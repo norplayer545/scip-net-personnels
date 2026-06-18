@@ -39,10 +39,15 @@ function sleep(ms) {
     return new Promise(r => setTimeout(r, ms));
 }
 
+function rand(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 function scrollBottom() {
     terminal.scrollTop = terminal.scrollHeight;
 }
 
+/* ===== TYPEWRITER (UNCHANGED) ===== */
 async function type(text, speed = 2) {
     for (let i = 0; i < text.length; i++) {
         output.textContent += text[i];
@@ -52,10 +57,16 @@ async function type(text, speed = 2) {
 }
 
 async function println(text = "") {
+
+    // SMALL CHANCE OF BOOT LAG EVEN INSIDE PRINT
+    if (Math.random() < 0.15) {
+        await sleep(rand(120, 600));
+    }
+
     await type(text + "\n");
 }
 
-/* ===== BOOT ===== */
+/* ===== BOOT WITH STUTTERS ===== */
 async function boot() {
 
     if (!output) {
@@ -65,20 +76,48 @@ async function boot() {
 
     output.textContent = "";
 
+    /* LOGO WITH STUTTERS */
     for (const line of logo) {
+
+        if (Math.random() < 0.35) {
+            await println("[SYSTEM BUFFERING...]");
+            await sleep(rand(200, 900));
+        }
+
         await println(line);
     }
 
     await println("");
+
     await println("SECURE CONTAINMENT INFORMATION PROCESSING NETWORK");
     await println("");
 
+    /* SYSTEM CHECK WITH FREEZES */
     await println("[SYSTEM CHECK]");
-    await println("Kernel ........ OK");
-    await println("Filesystem .... OK");
-    await println("Database ...... OK");
-    await println("Auth Service .. OK");
+
+    const checks = [
+        "Kernel ........ OK",
+        "Filesystem .... OK",
+        "Database ...... OK",
+        "Auth Service .. OK"
+    ];
+
+    for (const c of checks) {
+
+        if (Math.random() < 0.4) {
+            await println("[DELAY DETECTED - RETRYING MODULE]");
+            await sleep(rand(300, 1100));
+        }
+
+        await println(c);
+    }
+
     await println("");
+
+    if (Math.random() < 0.5) {
+        await println("[WARNING] SYSTEM TIMING DESYNC DETECTED");
+        await sleep(rand(400, 1200));
+    }
 
     await println("SYSTEM READY\n");
 
@@ -86,7 +125,7 @@ async function boot() {
     input.focus();
 }
 
-/* ===== SAFE STARTUP (IMPORTANT FIX) ===== */
+/* ===== SAFE STARTUP ===== */
 window.addEventListener("DOMContentLoaded", () => {
     boot();
 });
