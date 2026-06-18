@@ -60,11 +60,30 @@ async function println(text = "") {
     await type(text + "\n");
 }
 
-/* ===== PURE SILENT STUTTER (NO TEXT EVER) ===== */
+/* ===== PURE SILENT STUTTER ===== */
 async function stutter() {
     if (Math.random() < 0.9) {
         await sleep(rand(150, 1400));
     }
+}
+
+/* ===== SYSTEM CHECK (NEW LOADER) ===== */
+async function loadCheck(name) {
+    let dots = "";
+
+    for (let i = 0; i < 3; i++) {
+
+        await stutter();
+
+        dots += ".";
+        output.textContent += `\r${name}${dots}`;
+        scrollBottom();
+
+        await sleep(rand(200, 500));
+    }
+
+    output.textContent += ` OK\n`;
+    scrollBottom();
 }
 
 /* ===== BOOT ===== */
@@ -76,29 +95,27 @@ async function boot() {
 
     /* LOGO */
     for (const line of logo) {
-
-        await stutter();   // silent freeze ONLY
+        await stutter();
         await println(line);
-        await stutter();   // silent freeze ONLY
+        await stutter();
     }
 
     await println("");
     await println("SECURE CONTAINMENT INFORMATION PROCESSING NETWORK");
     await println("");
 
-    /* SYSTEM CHECK */
+    /* SYSTEM CHECK (UPDATED) */
     await println("[SYSTEM CHECK]");
 
     const checks = [
-        "Kernel ........ OK",
-        "Filesystem .... OK",
-        "Database ...... OK",
-        "Auth Service .. OK"
+        "Kernel",
+        "Filesystem",
+        "Database",
+        "Auth Service"
     ];
 
     for (const c of checks) {
-        await stutter();
-        await println(c);
+        await loadCheck(c);
     }
 
     await println("");
