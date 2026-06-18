@@ -19,7 +19,8 @@ body {
     margin: 0;
     text-shadow:
         0 0 5px #00ff66,
-        0 0 10px #00ff66;
+        0 0 10px #00ff66,
+        0 0 20px #00ff66;
 }
 
 #input-line {
@@ -30,6 +31,15 @@ body {
 
 #prompt {
     margin-right: 8px;
+    white-space: nowrap;
+}
+
+.user {
+    color: #00cc00;
+}
+
+.host {
+    color: #3ea6ff;
 }
 
 #command {
@@ -40,14 +50,26 @@ body {
     font-family: inherit;
     font-size: inherit;
     flex: 1;
+
+    /* Hide browser caret */
+    caret-color: transparent;
 }
 
 #cursor {
-    animation: blink 1s step-end infinite;
+    display: inline-block;
+    width: 9px;
+    height: 18px;
+    background: #ffffff;
+    margin-left: 2px;
+    vertical-align: middle;
+    animation: terminalBlink 1s steps(1) infinite;
 }
 
-@keyframes blink {
-    50% {
+@keyframes terminalBlink {
+    0%, 49% {
+        opacity: 1;
+    }
+    50%, 100% {
         opacity: 0;
     }
 }
@@ -62,6 +84,19 @@ body {
             transparent 2px,
             rgba(255,255,255,0.03) 3px
         );
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background:
+        linear-gradient(
+            rgba(18,16,16,0) 50%,
+            rgba(0,0,0,0.15) 50%
+        );
+    background-size: 100% 4px;
 }
 
 body::after {
