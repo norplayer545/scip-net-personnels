@@ -4,9 +4,9 @@ body {
     background: #000;
     color: #fff;
     font-family: 'VT323', monospace;
-    font-size: 18px;
+    font-size: 20px;
     margin: 0;
-    padding: 4px;
+    padding: 10px;
     overflow: hidden;
 }
 
@@ -14,36 +14,22 @@ body {
     width: 100%;
     height: 100vh;
     overflow-y: auto;
-}
-
-#title {
-    font-size: 8rem;
-    line-height: .8;
-    margin-bottom: 25px;
-
-    color: #ffffff;
-
-    text-shadow:
-        0 0 2px #fff,
-        0 0 5px #fff,
-        0 0 10px #fff,
-        0 0 20px #fff;
-
-    user-select: none;
+    padding: 10px;
 }
 
 #output {
     white-space: pre-wrap;
     margin: 0;
-
     text-shadow:
         0 0 2px rgba(255,255,255,.7),
         0 0 8px rgba(255,255,255,.2);
 }
 
+/* INPUT LINE FIXED */
 #input-line {
     display: none;
     align-items: center;
+    margin-top: 10px;
 }
 
 #prompt {
@@ -59,12 +45,13 @@ body {
     font-family: inherit;
     font-size: inherit;
 
-    min-width: 1ch;
-    width: 1ch;
+    width: 100%;
+    min-width: 200px;
 
     caret-color: #fff;
 }
 
+/* CRT EFFECT */
 #crt {
     position: fixed;
     inset: 0;
