@@ -4,9 +4,9 @@ body {
     background: #000;
     color: #fff;
     font-family: 'VT323', monospace;
-    font-size: 20px;
+    font-size: 28px;
     margin: 0;
-    padding: 4px;
+    padding: 6px;
     overflow: hidden;
 }
 
@@ -14,30 +14,25 @@ body {
     width: 100%;
     height: 100vh;
     overflow-y: auto;
-    overflow-x: hidden;
 }
 
 #output {
     white-space: pre-wrap;
-    word-break: break-word;
     margin: 0;
     color: #fff;
 
     text-shadow:
-        0 0 2px rgba(255,255,255,0.8),
-        0 0 8px rgba(255,255,255,0.3);
+        0 0 3px rgba(255,255,255,.7),
+        0 0 8px rgba(255,255,255,.25);
 }
 
 #input-line {
     display: none;
     align-items: center;
-    margin-top: 4px;
 }
 
 #prompt {
-    color: #fff;
     margin-right: 8px;
-    flex-shrink: 0;
 }
 
 #command {
@@ -48,26 +43,24 @@ body {
     font-family: inherit;
     font-size: inherit;
     flex: 1;
-
-    /* hide browser caret */
     caret-color: transparent;
 }
 
 #cursor {
-    display: inline-block;
-    width: 10px;
-    height: 22px;
+    width: 12px;
+    height: 26px;
     background: #fff;
+    display: inline-block;
     margin-left: 2px;
-    animation: terminalBlink 1s steps(1) infinite;
+    animation: blink 1s steps(1) infinite;
 }
 
-@keyframes terminalBlink {
-    0%, 49% {
+@keyframes blink {
+    0%,49% {
         opacity: 1;
     }
 
-    50%, 100% {
+    50%,100% {
         opacity: 0;
     }
 }
@@ -80,24 +73,10 @@ body {
     background:
         repeating-linear-gradient(
             0deg,
-            rgba(255,255,255,0.015) 0px,
-            rgba(255,255,255,0.015) 1px,
+            rgba(255,255,255,.02) 0px,
+            rgba(255,255,255,.02) 1px,
             transparent 2px,
             transparent 4px
-        );
-}
-
-body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-
-    background:
-        radial-gradient(
-            ellipse at center,
-            transparent 60%,
-            rgba(0,0,0,0.35) 100%
         );
 }
 
@@ -107,13 +86,10 @@ body::after {
     inset: 0;
     pointer-events: none;
 
-    opacity: 0.04;
-
-    background-image:
-        linear-gradient(
-            rgba(255,255,255,0.2) 1px,
-            transparent 1px
+    background:
+        radial-gradient(
+            ellipse at center,
+            transparent 50%,
+            rgba(0,0,0,.4) 100%
         );
-
-    background-size: 100% 4px;
 }
