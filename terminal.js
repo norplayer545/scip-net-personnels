@@ -4,26 +4,30 @@ const inputLine = document.getElementById("input-line");
 const terminal = document.getElementById("terminal");
 
 /* ===== ASCII LOGO ===== */
-// All non-breaking spaces cleaned to regular standard spaces
 const logo = [
 "███████╗ ██████╗██╗██████╗     ███╗   ██╗███████╗████████╗",
 "██╔════╝██╔════╝██║██╔══██╗    ████╗  ██║██╔════╝╚══██╔══╝",
-"███████╗██║     ██║██████╔╝    ██╔██╗ ██║█████╗     ██║   ",
-"╚════██║██║     ██║██╔═══╝     ██║╚██╗██║██╔══╝     ██║   ",
-"███████║╚██████╗██║██║         ██║ ╚████║███████╗   ██║   ",
-"╚══════╝ ╚═════╝╚═╝╚═╝         ╚═╝  ╚═══╝╚══════╝   ╚═╝   ",
+"███████╗██║     ██║██████╔╝    ██╔██╗ ██║█████╗     ██║",
+"╚════██║██║     ██║██╔═══╝     ██║╚██╗██║██╔══╝     ██║",
+"███████║╚██████╗██║██║         ██║ ╚████║███████╗   ██║",
+"╚══════╝ ╚═════╝╚═╝╚═╝         ╚═╝  ╚═══╝╚══════╝   ╚═╝",
 "",
-"         scip.net.personnels"
+"        scip.net.personnels"
 ];
 
 /* ===== COMMANDS ===== */
 const commands = {
-    help: `AVAILABLE COMMANDS\nHELP\nVERSION\nSTATUS\nABOUT\nLOGIN\nDATABASE\nCLEAR`,
-    version: `SCIP.NET TERMINAL\nVERSION 2.0.0\nBUILD 2026.06`,
-    status: `NETWORK STATUS .... ONLINE\nDATABASE STATUS ... ONLINE\nAUTH SERVICE ...... ONLINE`,
-    about: `SECURE CONTAINMENT INFORMATION PROCESSING NETWORK\nAUTHORIZED PERSONNEL ONLY`,
-    login: `AUTHENTICATION SERVICE READY`,
-    database: `PERSONNEL DATABASE CONNECTED\nERRORS DETECTED: 0`
+help: `AVAILABLE COMMANDS\nHELP\nVERSION\nSTATUS\nABOUT\nLOGIN\nDATABASE\nCLEAR`,
+
+version: `SCIP.NET TERMINAL\nVERSION 2.0.0\nBUILD 2026.06`,
+
+status: `NETWORK STATUS .... ONLINE\nDATABASE STATUS ... ONLINE\nAUTH SERVICE ...... ONLINE`,
+
+about: `SECURE CONTAINMENT INFORMATION PROCESSING NETWORK\nAUTHORIZED PERSONNEL ONLY`,
+
+login: `AUTHENTICATION SERVICE READY`,
+
+database: `PERSONNEL DATABASE CONNECTED\nERRORS DETECTED: 0`
 };
 
 /* ===== STATE ===== */
@@ -63,7 +67,7 @@ async function stutter() {
     }
 }
 
-/* ===== SYSTEM CHECK (DOT LOADER) ===== */
+/* ===== SYSTEM CHECK ===== */
 async function loadCheck(name) {
     let dots = "";
 
@@ -83,15 +87,19 @@ async function loadCheck(name) {
 
 /* ===== BOOT ===== */
 async function boot() {
+
     if (!output) return;
 
     output.textContent = "";
 
-    /* ===== INSTANT LOGO (FIXED) ===== */
-    output.textContent += logo.join("\n") + "\n\n";
+    /* ===== LOGO (FIXED: LINE BY LINE) ===== */
+    for (const line of logo) {
+        await stutter();
+        await println(line);
+        await stutter();
+    }
 
-    // Replaced unpredictable stutter here with a clean loading beat
-    await sleep(400); 
+    await println("");
     await println("SECURE CONTAINMENT INFORMATION PROCESSING NETWORK");
     await println("");
 
@@ -127,6 +135,7 @@ window.addEventListener("DOMContentLoaded", () => {
 document.addEventListener("click", () => input.focus());
 
 input.addEventListener("keydown", async e => {
+
     if (e.key === "ArrowUp") {
         e.preventDefault();
         if (!history.length) return;
