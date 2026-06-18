@@ -3,8 +3,6 @@ const input = document.getElementById("command");
 const inputLine = document.getElementById("input-line");
 const terminal = document.getElementById("terminal");
 
-console.log(">>> NEW TERMINAL JS LOADED <<<");
-
 /* ===== ASCII LOGO ===== */
 const logo = [
 "███████╗ ██████╗██╗██████╗     ███╗   ██╗███████╗████████╗",
@@ -62,19 +60,18 @@ async function println(text = "") {
     await type(text + "\n");
 }
 
-/* ===== PURE SILENT STUTTER ===== */
+/* ===== SILENT STUTTER ===== */
 async function stutter() {
     if (Math.random() < 0.9) {
         await sleep(rand(150, 1400));
     }
 }
 
-/* ===== SYSTEM CHECK (NEW LOADER) ===== */
+/* ===== SYSTEM CHECK (DOT LOADER) ===== */
 async function loadCheck(name) {
     let dots = "";
 
     for (let i = 0; i < 3; i++) {
-
         await stutter();
 
         dots += ".";
@@ -95,18 +92,14 @@ async function boot() {
 
     output.textContent = "";
 
-    /* LOGO */
-    for (const line of logo) {
-        await stutter();
-        await println(line);
-        await stutter();
-    }
+    /* ===== INSTANT LOGO (FIX) ===== */
+    output.textContent += logo.join("\n") + "\n\n";
 
-    await println("");
+    await stutter();
     await println("SECURE CONTAINMENT INFORMATION PROCESSING NETWORK");
     await println("");
 
-    /* SYSTEM CHECK (UPDATED) */
+    /* SYSTEM CHECK */
     await println("[SYSTEM CHECK]");
 
     const checks = [
@@ -129,7 +122,7 @@ async function boot() {
     input.focus();
 }
 
-/* ===== SAFE START ===== */
+/* ===== START ===== */
 window.addEventListener("DOMContentLoaded", () => {
     boot();
 });
