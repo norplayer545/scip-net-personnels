@@ -3,7 +3,7 @@ const input = document.getElementById("command");
 const inputLine = document.getElementById("input-line");
 const terminal = document.getElementById("terminal");
 
-/* ===== BIG ASCII BANNER (RESTORED) ===== */
+/* ===== ASCII BANNER ===== */
 const logo = [
 "███████╗ ██████╗██╗██████╗     ███╗   ██╗███████╗████████╗",
 "██╔════╝██╔════╝██║██╔══██╗    ████╗  ██║██╔════╝╚══██╔══╝",
@@ -15,49 +15,27 @@ const logo = [
 "        scip.net.personnels"
 ];
 
+/* ===== COMMANDS ===== */
 const commands = {
-help: `
-AVAILABLE COMMANDS
-HELP
-VERSION
-STATUS
-ABOUT
-LOGIN
-DATABASE
-CLEAR
-`,
+help: `AVAILABLE COMMANDS\nHELP\nVERSION\nSTATUS\nABOUT\nLOGIN\nDATABASE\nCLEAR`,
 
-version: `
-SCIP.NET TERMINAL
-VERSION 2.0.0
-BUILD 2026.06
-`,
+version: `SCIP.NET TERMINAL\nVERSION 2.0.0\nBUILD 2026.06`,
 
-status: `
-NETWORK STATUS .... ONLINE
-DATABASE STATUS ... ONLINE
-AUTH SERVICE ...... ONLINE
-`,
+status: `NETWORK STATUS .... ONLINE\nDATABASE STATUS ... ONLINE\nAUTH SERVICE ...... ONLINE`,
 
-about: `
-SECURE CONTAINMENT INFORMATION PROCESSING NETWORK
-AUTHORIZED PERSONNEL ONLY
-`,
+about: `SECURE CONTAINMENT INFORMATION PROCESSING NETWORK\nAUTHORIZED PERSONNEL ONLY`,
 
-login: `
-AUTHENTICATION SERVICE READY
-`,
+login: `AUTHENTICATION SERVICE READY`,
 
-database: `
-PERSONNEL DATABASE CONNECTED
-ERRORS DETECTED: 0
-`
+database: `PERSONNEL DATABASE CONNECTED\nERRORS DETECTED: 0`
 };
 
+/* ===== STATE ===== */
 const history = [];
 let historyIndex = -1;
 
-/* ===== UTIL ===== */
+/* ===== CORE FIXES ===== */
+
 function sleep(ms) {
     return new Promise(r => setTimeout(r, ms));
 }
@@ -66,10 +44,11 @@ function scrollBottom() {
     terminal.scrollTop = terminal.scrollHeight;
 }
 
-async function type(text, speed = 5) {
-    for (const char of text) {
-        output.textContent += char;
-        scrollBottom();
+/* smoother + safer typewriter */
+async function type(text, speed = 2) {
+    for (let i = 0; i < text.length; i++) {
+        output.textContent += text[i];
+        if (i % 2 === 0) scrollBottom();
         await sleep(speed);
     }
 }
@@ -78,9 +57,13 @@ async function println(text = "") {
     await type(text + "\n");
 }
 
-/* ===== BOOT SEQUENCE ===== */
+/* ===== BOOT (FIXED ORDER) ===== */
 async function boot() {
 
+    // clear first so nothing overlaps
+    output.textContent = "";
+
+    // big logo first (IMPORTANT FIX)
     for (const line of logo) {
         await println(line);
     }
@@ -89,36 +72,31 @@ async function boot() {
     await println("SECURE CONTAINMENT INFORMATION PROCESSING NETWORK");
     await println("");
 
-    await println("INITIALIZING KERNEL... [OK]");
-    await println("LOADING CORE MODULES... [OK]");
-    await println("VERIFYING FILESYSTEM... [OK]");
-    await println("MOUNTING DATABASE... [OK]");
-    await println("STARTING AUTH SERVICE... [OK]");
+    await println("[SYSTEM CHECK]");
+    await println("Kernel ........ OK");
+    await println("Filesystem .... OK");
+    await println("Database ...... OK");
+    await println("Auth Service .. OK");
     await println("");
 
-    await println("SYSTEM READY");
-    await println("");
+    await println("SYSTEM READY\n");
 
     inputLine.style.display = "flex";
     input.focus();
 }
 
-/* start */
 boot();
 
-/* click refocus */
+/* ===== INPUT HANDLING ===== */
 document.addEventListener("click", () => input.focus());
 
-/* ===== INPUT ===== */
 input.addEventListener("keydown", async e => {
 
     if (e.key === "ArrowUp") {
         e.preventDefault();
-
         if (!history.length) return;
 
-        if (historyIndex < history.length - 1)
-            historyIndex++;
+        if (historyIndex < history.length - 1) historyIndex++;
 
         input.value = history[history.length - 1 - historyIndex];
         return;
@@ -140,12 +118,12 @@ input.addEventListener("keydown", async e => {
     if (e.key !== "Enter") return;
 
     const cmd = input.value.trim();
+    const lower = cmd.toLowerCase();
+
     history.push(cmd);
     historyIndex = -1;
 
     output.textContent += `> ${cmd}\n`;
-
-    const lower = cmd.toLowerCase();
 
     if (lower === "clear") {
         output.textContent = "";
