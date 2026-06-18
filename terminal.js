@@ -60,10 +60,10 @@ async function println(text = "") {
     await type(text + "\n");
 }
 
-/* ===== SILENT STUTTER ===== */
+/* ===== LIGHT STUTTER (FIXED) ===== */
 async function stutter() {
-    if (Math.random() < 0.9) {
-        await sleep(rand(150, 1400));
+    if (Math.random() < 0.35) {
+        await sleep(rand(20, 120));
     }
 }
 
@@ -78,7 +78,7 @@ async function loadCheck(name) {
         output.textContent += `\r${name}${dots}`;
         scrollBottom();
 
-        await sleep(rand(200, 500));
+        await sleep(rand(80, 200));
     }
 
     output.textContent += ` OK\n`;
@@ -92,11 +92,10 @@ async function boot() {
 
     output.textContent = "";
 
-    /* ===== LOGO (FIXED: LINE BY LINE) ===== */
+    /* ===== LOGO (FAST LINE-BY-LINE) ===== */
     for (const line of logo) {
         await stutter();
         await println(line);
-        await stutter();
     }
 
     await println("");
@@ -119,7 +118,6 @@ async function boot() {
 
     await println("");
 
-    await stutter();
     await println("SYSTEM READY\n");
 
     inputLine.style.display = "flex";
