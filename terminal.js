@@ -3,67 +3,46 @@ const input = document.getElementById("command");
 const inputLine = document.getElementById("input-line");
 const terminal = document.getElementById("terminal");
 
-const logo = [
-" ███████╗ ██████╗██╗██████╗     ███╗   ██╗███████╗████████╗",
-" ██╔════╝██╔════╝██║██╔══██╗    ████╗  ██║██╔════╝╚══██╔══╝",
-" ███████╗██║     ██║██████╔╝    ██╔██╗ ██║█████╗     ██║",
-" ╚════██║██║     ██║██╔═══╝     ██║╚██╗██║██╔══╝     ██║",
-" ███████║╚██████╗██║██║         ██║ ╚████║███████╗   ██║",
-" ╚══════╝ ╚═════╝╚═╝╚═╝         ╚═╝  ╚═══╝╚══════╝   ╚═╝"
-];
-
 const commands = {
     help: `
 AVAILABLE COMMANDS
 
-HELP        Display available commands
-VERSION     Show system version
-STATUS      Show network status
-LOGIN       Authentication service
-DATABASE    Database status
-ABOUT       System information
-CLEAR       Clear terminal
+HELP
+VERSION
+STATUS
+ABOUT
+LOGIN
+DATABASE
+CLEAR
 `,
 
     version: `
-SCiP.NET TERMINAL
+SCIP.NET TERMINAL
 
-VERSION : 2.0.0
-BUILD   : 2026.06
-KERNEL  : FOUNDATION-CORE
+VERSION 2.0.0
+BUILD 2026.06
+`,
+
+    status: `
+NETWORK STATUS .... ONLINE
+DATABASE STATUS ... ONLINE
+AUTH SERVICE ...... ONLINE
 `,
 
     about: `
 SECURE CONTAINMENT INFORMATION PROCESSING NETWORK
 
-AUTHORIZED FOUNDATION PERSONNEL ONLY
-
-UNAUTHORIZED ACCESS IS PROHIBITED
-`,
-
-    status: `
-NETWORK STATUS ........ ONLINE
-DATABASE STATUS ....... ONLINE
-AUTH SERVICE .......... ONLINE
-INCIDENT ARCHIVE ...... ONLINE
-PERSONNEL RECORDS ..... ONLINE
+AUTHORIZED PERSONNEL ONLY
 `,
 
     login: `
 AUTHENTICATION SERVICE READY
-
-ENTER CREDENTIALS
 `,
 
     database: `
 PERSONNEL DATABASE CONNECTED
-
-RECORDS AVAILABLE : 1,284
-ERRORS DETECTED   : 0
-`,
-
-    cls: "__CLEAR__",
-    clear: "__CLEAR__"
+ERRORS DETECTED: 0
+`
 };
 
 const history = [];
@@ -77,7 +56,7 @@ function scrollBottom() {
     terminal.scrollTop = terminal.scrollHeight;
 }
 
-async function type(text, speed = 15) {
+async function type(text, speed = 10) {
     for (const char of text) {
         output.textContent += char;
         scrollBottom();
@@ -85,50 +64,25 @@ async function type(text, speed = 15) {
     }
 }
 
-async function println(text = "", speed = 15) {
-    await type(text + "\n", speed);
-}
-
-async function loading(text) {
-    await type(text);
-
-    for (let i = 0; i < 3; i++) {
-        await sleep(300);
-        await type(".");
-    }
-
-    await sleep(150);
-    await println(" [OK]", 2);
+async function println(text = "") {
+    await type(text + "\n");
 }
 
 async function boot() {
 
-    for (const line of logo) {
-        await println(line, 1);
-        await sleep(15);
-    }
-
+    await println("SCIP NET");
     await println("");
-    await println(
-        "SECURE CONTAINMENT INFORMATION PROCESSING NETWORK",
-        4
-    );
-
+    await println("SECURE CONTAINMENT INFORMATION PROCESSING NETWORK");
     await println("");
-    await sleep(400);
 
-    await loading("INITIALIZING KERNEL");
-    await loading("LOADING FOUNDATION CORE");
-    await loading("VERIFYING FILESYSTEM");
-    await loading("MOUNTING PERSONNEL DATABASE");
-    await loading("LOADING INCIDENT ARCHIVE");
-    await loading("STARTING AUTHENTICATION SERVICE");
-    await loading("ESTABLISHING SECURE CONNECTION");
-    await loading("CHECKING SYSTEM INTEGRITY");
-
+    await println("INITIALIZING KERNEL... [OK]");
+    await println("LOADING FOUNDATION CORE... [OK]");
+    await println("VERIFYING FILESYSTEM... [OK]");
+    await println("MOUNTING PERSONNEL DATABASE... [OK]");
+    await println("STARTING AUTHENTICATION SERVICE... [OK]");
     await println("");
-    await println("ACCESS LEVEL: UNCLASSIFIED", 5);
-    await println("SYSTEM STATUS: READY", 5);
+
+    await println("SYSTEM READY");
     await println("");
 
     inputLine.style.display = "flex";
@@ -141,13 +95,13 @@ document.addEventListener("click", () => {
     input.focus();
 });
 
-input.addEventListener("keydown", async (e) => {
+input.addEventListener("keydown", async e => {
 
     if (e.key === "ArrowUp") {
 
         e.preventDefault();
 
-        if (history.length === 0)
+        if (!history.length)
             return;
 
         if (historyIndex < history.length - 1)
@@ -187,47 +141,21 @@ input.addEventListener("keydown", async (e) => {
     history.push(cmd);
     historyIndex = -1;
 
-    output.textContent +=
-        `admin@scipnet:~$ ${cmd}\n`;
+    output.textContent += `> ${cmd}\n`;
 
-    scrollBottom();
+    if (cmd.toLowerCase() === "clear") {
 
-    if (cmd === "") {
-
-        output.textContent += "\n";
+        output.textContent = "";
     }
-    else {
+    else if (commands[cmd.toLowerCase()]) {
 
-        const command =
-            commands[cmd.toLowerCase()];
+        await println(commands[cmd.toLowerCase()]);
+    }
+    else if (cmd !== "") {
 
-        if (command === "__CLEAR__") {
-
-            output.textContent = "";
-
-            await println(
-                "SCiP.NET TERMINAL CLEARED",
-                5
-            );
-
-            await println("");
-        }
-        else if (command) {
-
-            await println(command, 5);
-        }
-        else {
-
-            await println(
-                `ERROR: COMMAND NOT FOUND: ${cmd}`,
-                5
-            );
-
-            await println(
-                "TYPE 'HELP' FOR AVAILABLE COMMANDS",
-                5
-            );
-        }
+        await println(
+            `UNKNOWN COMMAND: ${cmd}`
+        );
     }
 
     input.value = "";
