@@ -42,7 +42,12 @@ body {
     color: #fff;
     font-family: inherit;
     font-size: inherit;
-    flex: 1;
+
+    width: auto;
+    min-width: 10px;
+
+    flex: none;
+
     caret-color: transparent;
 }
 
