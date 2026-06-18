@@ -3,7 +3,7 @@ const input = document.getElementById("command");
 const inputLine = document.getElementById("input-line");
 const terminal = document.getElementById("terminal");
 
-/* ===== ASCII BANNER ===== */
+/* ===== ASCII LOGO ===== */
 const logo = [
 "███████╗ ██████╗██╗██████╗     ███╗   ██╗███████╗████████╗",
 "██╔════╝██╔════╝██║██╔══██╗    ████╗  ██║██╔════╝╚══██╔══╝",
@@ -34,8 +34,7 @@ database: `PERSONNEL DATABASE CONNECTED\nERRORS DETECTED: 0`
 const history = [];
 let historyIndex = -1;
 
-/* ===== CORE FIXES ===== */
-
+/* ===== CORE ===== */
 function sleep(ms) {
     return new Promise(r => setTimeout(r, ms));
 }
@@ -44,7 +43,6 @@ function scrollBottom() {
     terminal.scrollTop = terminal.scrollHeight;
 }
 
-/* smoother + safer typewriter */
 async function type(text, speed = 2) {
     for (let i = 0; i < text.length; i++) {
         output.textContent += text[i];
@@ -57,13 +55,16 @@ async function println(text = "") {
     await type(text + "\n");
 }
 
-/* ===== BOOT (FIXED ORDER) ===== */
+/* ===== BOOT ===== */
 async function boot() {
 
-    // clear first so nothing overlaps
+    if (!output) {
+        console.error("OUTPUT NOT FOUND");
+        return;
+    }
+
     output.textContent = "";
 
-    // big logo first (IMPORTANT FIX)
     for (const line of logo) {
         await println(line);
     }
@@ -85,9 +86,12 @@ async function boot() {
     input.focus();
 }
 
-boot();
+/* ===== SAFE STARTUP (IMPORTANT FIX) ===== */
+window.addEventListener("DOMContentLoaded", () => {
+    boot();
+});
 
-/* ===== INPUT HANDLING ===== */
+/* ===== INPUT ===== */
 document.addEventListener("click", () => input.focus());
 
 input.addEventListener("keydown", async e => {
