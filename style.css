@@ -157,15 +157,15 @@ body::before {
     pointer-events: none;
     z-index: 998;
 
-    opacity: .03;
+    opacity: .015;
 
-    animation: flicker 0.15s infinite;
+    animation: flicker 0.8s infinite;
 
     background: #fff;
 }
 
 @keyframes flicker {
-    0% { opacity: .02; }
-    50% { opacity: .04; }
-    100% { opacity: .02; }
+    0% { opacity: .01; }
+    50% { opacity: .02; }
+    100% { opacity: .01; }
 }
