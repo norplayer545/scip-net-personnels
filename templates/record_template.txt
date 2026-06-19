@@ -1,0 +1,28 @@
+================================
+SCIP.NET PERSONNEL RECORD
+================================
+
+ID:
+{{ID}}
+
+NAME:
+{{NAME}}
+
+CLEARANCE:
+{{CLEARANCE}}
+
+DEPARTMENT:
+{{DEPARTMENT}}
+
+STATUS:
+{{STATUS}}
+
+LOCATION:
+{{LOCATION}}
+
+NOTES:
+{{NOTES}}
+
+================================
+END OF RECORD
+================================
