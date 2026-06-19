@@ -233,10 +233,12 @@ if (lower.startsWith("search ")) {
 
                 databaseMode = true;
 
-                await println("PERSONNEL DATABASE CONNECTED");
+                await println("DATABASE CONNECTED");
                 await println("");
                 await println("DATABASE ONLINE");
-                await println("ENTER QUERY OR TYPE EXIT");
+                await println("");
+                await println("TYPE SEARCH ALL TO SEE ALL AVAILABLE FILES");
+                await println("");
                 await println("CASE SENSITIVE");
             }
 
