@@ -234,10 +234,10 @@ if (databaseMode) {
                 databaseMode = true;
 
                 await println("PERSONNEL DATABASE CONNECTED");
-                await println("ERRORS DETECTED: 0");
                 await println("");
                 await println("DATABASE ONLINE");
                 await println("ENTER QUERY OR TYPE EXIT");
+                await println("CASE SENSITIVE");
             }
 
         }
