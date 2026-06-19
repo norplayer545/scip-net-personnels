@@ -169,7 +169,7 @@ input.addEventListener("keydown", async e => {
             return;
         }
 
-        /* ===== DATABASE MODE ===== */
+/* ===== DATABASE MODE ===== */
 
 if (databaseMode) {
 
@@ -183,11 +183,25 @@ if (databaseMode) {
     }
 
 
+    if (lower === "open template") {
+
+        const template = await openTemplate(
+            "record_template"
+        );
+
+        await println("");
+
+        await println(template);
+
+        await println("");
+
+        return;
+    }
+
+
     await println("");
 
-    const result = databaseSearch(cmd);
-
-    await println(result);
+    await println("UNKNOWN DATABASE COMMAND");
 
     await println("");
 
