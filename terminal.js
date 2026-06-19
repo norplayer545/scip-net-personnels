@@ -240,6 +240,7 @@ if (lower.startsWith("search ")) {
                 await println("TYPE SEARCH 'NAME' OR SEARCH ALL TO SEE ALL AVAILABLE FILES");
                 await println("");
                 await println("CASE SENSITIVE");
+                await println("");
             }
 
         }
