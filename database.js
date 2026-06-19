@@ -7,7 +7,7 @@ async function openTemplate(name) {
 
     if (!response.ok) {
 
-        return "TEMPLATE NOT FOUND";
+        return "RECORD NOT FOUND";
 
     }
 
