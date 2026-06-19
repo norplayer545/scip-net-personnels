@@ -185,24 +185,24 @@ if (databaseMode) {
     }
 
 
-    if (lower.startsWith("search ")) {
+if (lower.startsWith("search ")) {
 
-        const name = cmd.substring(7).trim();
-
-
-        const template = await openTemplate(
-            `template_${name}`
-        );
+    const name = cmd.substring(7).trim();
 
 
-        await println("");
+    const template = await openTemplate(
+        `template_${name}`
+    );
 
-        await println(template);
 
-        await println("");
+    // Clear terminal screen
+    output.innerHTML = "";
 
-        return;
-    }
+
+    await println(template);
+
+    return;
+}
 
 
     await println("");
