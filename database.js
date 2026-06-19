@@ -1,10 +1,7 @@
-/* ===== DATABASE TEMPLATE ENGINE ===== */
-
-
-async function openTemplate(template, values) {
+async function openTemplate(name) {
 
     const response = await fetch(
-        `templates/${template}.txt`
+        `templates/${name}.txt`
     );
 
 
@@ -15,19 +12,6 @@ async function openTemplate(template, values) {
     }
 
 
-    let content = await response.text();
-
-
-    for (const key in values) {
-
-        content = content.replaceAll(
-            `{{${key}}}`,
-            values[key]
-        );
-
-    }
-
-
-    return content;
+    return await response.text();
 
 }
