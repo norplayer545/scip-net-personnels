@@ -171,6 +171,8 @@ input.addEventListener("keydown", async e => {
 
 /* ===== DATABASE MODE ===== */
 
+/* ===== DATABASE MODE ===== */
+
 if (databaseMode) {
 
     if (lower === "exit") {
@@ -183,11 +185,15 @@ if (databaseMode) {
     }
 
 
-    if (lower === "open template") {
+    if (lower.startsWith("search ")) {
+
+        const name = cmd.substring(7).trim();
+
 
         const template = await openTemplate(
-            "record_template"
+            `template_${name}`
         );
+
 
         await println("");
 
@@ -200,9 +206,7 @@ if (databaseMode) {
 
 
     await println("");
-
     await println("UNKNOWN DATABASE COMMAND");
-
     await println("");
 
     return;
