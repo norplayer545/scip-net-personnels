@@ -237,7 +237,7 @@ if (lower.startsWith("search ")) {
                 await println("");
                 await println("DATABASE ONLINE");
                 await println("");
-                await println("TYPE SEARCH ALL TO SEE ALL AVAILABLE FILES");
+                await println("TYPE SEARCH 'NAME' OR SEARCH ALL TO SEE ALL AVAILABLE FILES");
                 await println("");
                 await println("CASE SENSITIVE");
             }
