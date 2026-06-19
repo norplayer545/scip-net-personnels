@@ -3,7 +3,7 @@ const input = document.getElementById("command");
 const inputLine = document.getElementById("input-line");
 const terminal = document.getElementById("terminal");
 
-/* ===== ASCII LOGO ===== */
+/* ===== LOGO ===== */
 const logo = [
 "███████╗ ██████╗██╗██████╗     ███╗   ██╗███████╗████████╗",
 "██╔════╝██╔════╝██║██╔══██╗    ████╗  ██║██╔════╝╚══██╔══╝",
@@ -18,36 +18,29 @@ const logo = [
 /* ===== COMMANDS ===== */
 const commands = {
 help: `AVAILABLE COMMANDS
-HELP
-VERSION
-STATUS
-ABOUT
-LOGIN
-DATABASE
-CLEAR`,
+
+HELP             - SHOW THIS MENU
+VERSION          - DISPLAY TERMINAL VERSION
+LOGIN            - AUTHENTICATE USER
+ACCESS DATABASE  - OPEN DATABASE MODE
+CLEAR            - CLEAR TERMINAL SCREEN
+EXIT             - CLOSE DATABASE MODE`,
 
 version: `SCIP.NET TERMINAL
 VERSION 2.0.0
-BUILD 2026.06`,
-
-status: `NETWORK STATUS .... ONLINE
-DATABASE STATUS ... ONLINE
-AUTH SERVICE ...... ONLINE`,
-
-about: `SECURE CONTAINMENT INFORMATION PROCESSING NETWORK
-AUTHORIZED PERSONNEL ONLY`,
-
-login: `AUTHENTICATION SERVICE READY`,
-
-database: `PERSONNEL DATABASE CONNECTED
-ERRORS DETECTED: 0`
+BUILD 2026.06`
 };
 
 /* ===== STATE ===== */
 const history = [];
 let historyIndex = -1;
 
-/* ===== CORE ===== */
+let loginState = null;
+let loginUser = "";
+let authenticated = false;
+let databaseMode = false;
+
+/* ===== HELPERS ===== */
 function sleep(ms) {
     return new Promise(r => setTimeout(r, ms));
 }
@@ -57,25 +50,21 @@ function rand(min, max) {
 }
 
 function scrollBottom() {
-    terminal.scrollTop = terminal.scrollHeight;
+    requestAnimationFrame(() => {
+        terminal.scrollTop = terminal.scrollHeight;
+    });
 }
 
-/* ===== OUTPUT HELPERS ===== */
-function appendText(text) {
+function append(text) {
     output.appendChild(document.createTextNode(text));
     scrollBottom();
 }
 
 /* ===== TYPEWRITER ===== */
-async function type(text, speed = 2) {
+async function type(text, speed = 8) {
     for (let i = 0; i < text.length; i++) {
-        appendText(text[i]);
-
-        if (i % 2 === 0) {
-            scrollBottom();
-        }
-
-        await sleep(speed);
+        append(text[i]);
+        await sleep(speed + rand(0, 3));
     }
 }
 
@@ -83,59 +72,35 @@ async function println(text = "") {
     await type(text + "\n");
 }
 
-/* ===== LIGHT STUTTER ===== */
-async function stutter() {
-    if (Math.random() < 0.35) {
-        await sleep(rand(20, 120));
-    }
-}
-
-/* ===== SYSTEM CHECK (FIXED) ===== */
+/* ===== SYSTEM CHECK ===== */
 async function loadCheck(name) {
-
     const line = document.createElement("div");
     output.appendChild(line);
 
     for (let i = 0; i <= 3; i++) {
-
-        await stutter();
-
         line.textContent = `${name}${".".repeat(i)}`;
-
         scrollBottom();
-
-        await sleep(rand(80, 200));
+        await sleep(rand(300, 600));
     }
 
     line.textContent = `${name} [OK]`;
-
     scrollBottom();
 }
 
 /* ===== BOOT ===== */
 async function boot() {
-
-    if (!output) return;
-
     output.innerHTML = "";
 
     for (const line of logo) {
-        await stutter();
         await println(line);
     }
 
     await println("");
     await println("SECURE CONTAINMENT INFORMATION PROCESSING NETWORK");
     await println("");
-
     await println("[SYSTEM CHECK]");
 
-    const checks = [
-        "Kernel",
-        "Filesystem",
-        "Database",
-        "Auth Service"
-    ];
+    const checks = ["Kernel", "Filesystem", "Database", "Auth Service"];
 
     for (const c of checks) {
         await loadCheck(c);
@@ -144,32 +109,148 @@ async function boot() {
     await println("");
     await println("SYSTEM READY");
     await println("");
+    await println("Enter 'help' for available commands.");
+    await println("");
 
     inputLine.style.display = "flex";
     input.focus();
 }
 
-/* ===== START ===== */
-window.addEventListener("DOMContentLoaded", () => {
-    boot();
-});
-
 /* ===== INPUT ===== */
+window.addEventListener("DOMContentLoaded", boot);
+
 document.addEventListener("click", () => input.focus());
 
 input.addEventListener("keydown", async e => {
+
+    if (e.key === "Enter") {
+        e.preventDefault();
+
+        const cmd = input.value.trim();
+        const lower = cmd.toLowerCase();
+
+        history.push(cmd);
+        historyIndex = -1;
+
+        const line = document.createElement("div");
+        line.textContent = `> ${cmd}`;
+        output.appendChild(line);
+
+        input.value = "";
+
+        /* ===== LOGIN FLOW ===== */
+
+        if (loginState === "username") {
+            loginUser = cmd;
+            loginState = "password";
+
+            await println("PASSWORD:");
+            return;
+        }
+
+        if (loginState === "password") {
+
+            if (
+                loginUser.toLowerCase() === "admin" &&
+                cmd === "scpnet"
+            ) {
+                authenticated = true;
+
+                await println("");
+                await println("ACCESS GRANTED");
+                await println(`WELCOME, ${loginUser.toUpperCase()}`);
+            } else {
+                await println("");
+                await println("ACCESS DENIED");
+            }
+
+            loginState = null;
+            loginUser = "";
+            return;
+        }
+
+        /* ===== DATABASE MODE ===== */
+
+if (databaseMode) {
+
+    if (lower === "exit") {
+
+        databaseMode = false;
+
+        await println("DATABASE CLOSED");
+
+        return;
+    }
+
+
+    await println("");
+
+    const result = databaseSearch(cmd);
+
+    await println(result);
+
+    await println("");
+
+    return;
+}
+
+        /* ===== COMMANDS ===== */
+
+        if (lower === "login") {
+
+            if (authenticated) {
+                await println("ALREADY AUTHENTICATED");
+            } else {
+                loginState = "username";
+                await println("USERNAME:");
+            }
+
+        }
+        else if (lower === "access database") {
+
+            if (!authenticated) {
+                await println("ACCESS DENIED");
+                await println("LOGIN REQUIRED");
+            } else {
+
+                databaseMode = true;
+
+                await println("PERSONNEL DATABASE CONNECTED");
+                await println("ERRORS DETECTED: 0");
+                await println("");
+                await println("DATABASE ONLINE");
+                await println("ENTER QUERY OR TYPE EXIT");
+            }
+
+        }
+        else if (lower === "help") {
+            await println(commands.help);
+        }
+        else if (lower === "version") {
+            await println(commands.version);
+        }
+        else if (lower === "clear") {
+            output.innerHTML = "";
+        }
+        else if (cmd) {
+            await println(`UNKNOWN COMMAND: ${cmd}`);
+        }
+
+        scrollBottom();
+    }
 
     if (e.key === "ArrowUp") {
         e.preventDefault();
 
         if (!history.length) return;
 
-        if (historyIndex < history.length - 1) {
-            historyIndex++;
-        }
+        historyIndex = Math.min(
+            historyIndex + 1,
+            history.length - 1
+        );
 
-        input.value = history[history.length - 1 - historyIndex];
-        return;
+        input.value =
+            history[history.length - 1 - historyIndex];
     }
 
     if (e.key === "ArrowDown") {
@@ -177,35 +258,12 @@ input.addEventListener("keydown", async e => {
 
         if (historyIndex > 0) {
             historyIndex--;
-            input.value = history[history.length - 1 - historyIndex];
+
+            input.value =
+                history[history.length - 1 - historyIndex];
         } else {
             historyIndex = -1;
             input.value = "";
         }
-
-        return;
     }
-
-    if (e.key !== "Enter") return;
-
-    const cmd = input.value.trim();
-    const lower = cmd.toLowerCase();
-
-    history.push(cmd);
-    historyIndex = -1;
-
-    appendText(`> ${cmd}\n`);
-
-    if (lower === "clear") {
-        output.innerHTML = "";
-    }
-    else if (commands[lower]) {
-        await println(commands[lower]);
-    }
-    else if (cmd !== "") {
-        await println(`UNKNOWN COMMAND: ${cmd}`);
-    }
-
-    input.value = "";
-    scrollBottom();
 });
