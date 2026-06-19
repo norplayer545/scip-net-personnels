@@ -1,16 +1,30 @@
 @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
 
+* {
+    box-sizing: border-box;
+}
+
+html,
 body {
-    background: #000;
-    color: #fff;
-    font-family: 'VT323', monospace;
-    font-size: 20px;
+    width: 100%;
+    height: 100%;
     margin: 0;
     padding: 0;
+
+    background: #000;
+    color: #fff;
+
+    font-family: 'VT323', monospace;
+    font-size: 14px;
+
     overflow: hidden;
 }
 
+/* ===== TERMINAL ===== */
+
 #terminal {
+    position: relative;
+
     width: 100%;
     height: 100vh;
 
@@ -18,69 +32,140 @@ body {
     flex-direction: column;
 
     padding: 12px;
-    box-sizing: border-box;
+
+    overflow: hidden;
 }
+
+/* ===== OUTPUT ===== */
 
 #output {
     flex: 1;
-    white-space: pre-wrap;
+
     margin: 0;
+    padding: 0;
+
     overflow-y: auto;
+    overflow-x: hidden;
+
+    white-space: pre-wrap;
+    word-break: break-word;
+
+    scrollbar-width: none;
 
     text-shadow:
-        0 0 2px rgba(255,255,255,.7),
-        0 0 8px rgba(255,255,255,.2);
+        0 0 2px rgba(255,255,255,.6),
+        0 0 8px rgba(255,255,255,.15);
 }
+
+#output::-webkit-scrollbar {
+    display: none;
+}
+
+/* ===== INPUT LINE ===== */
 
 #input-line {
     display: none;
+
     align-items: center;
+    gap: 8px;
+
+    padding: 8px 10px;
     margin-top: 8px;
+
+    border-top: 1px solid rgba(255,255,255,.15);
+
+    background: rgba(0, 0, 0, 0.85);
+
+    flex-shrink: 0;
 }
+
+/* ===== PROMPT ===== */
 
 #prompt {
-    margin-right: 8px;
+    opacity: 0.8;
+
+    user-select: none;
 }
 
+/* ===== INPUT ===== */
+
 #command {
+    flex: 1;
+
     background: transparent;
     border: none;
     outline: none;
 
     color: #fff;
+
     font-family: inherit;
     font-size: inherit;
 
-    flex: 1;
     caret-color: #fff;
 }
 
-/* CRT overlay */
+#command::selection {
+    background: rgba(255,255,255,.25);
+}
+
+/* ===== CRT OVERLAY ===== */
+
 #crt {
     position: fixed;
     inset: 0;
+
     pointer-events: none;
+    z-index: 999;
 
     background:
         repeating-linear-gradient(
             0deg,
-            rgba(255,255,255,.015) 0px,
-            rgba(255,255,255,.015) 1px,
+            rgba(255,255,255,.02) 0px,
+            rgba(255,255,255,.02) 1px,
             transparent 2px,
             transparent 4px
         );
 }
 
+/* ===== VIGNETTE ===== */
+
 body::after {
     content: "";
+
     position: fixed;
     inset: 0;
+
     pointer-events: none;
+    z-index: 1000;
 
     background:
         radial-gradient(
             ellipse at center,
-            transparent 50%,
-            rgba(0,0,0,.45) 100%
+            transparent 55%,
+            rgba(0,0,0,.55) 100%
         );
+}
+
+/* ===== FLICKER ===== */
+
+body::before {
+    content: "";
+
+    position: fixed;
+    inset: 0;
+
+    pointer-events: none;
+    z-index: 998;
+
+    opacity: .03;
+
+    animation: flicker 0.15s infinite;
+
+    background: #fff;
+}
+
+@keyframes flicker {
+    0% { opacity: .02; }
+    50% { opacity: .04; }
+    100% { opacity: .02; }
 }
